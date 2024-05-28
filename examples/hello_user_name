@@ -1,0 +1,53 @@
+section .data
+    hello_begin: "Hello, "
+    hello_end: "!"
+
+section .text
+
+read:
+    mov r0, *a0
+    mov r1, a0 + 1
+    mov r2, 0
+.loop:
+    cmp r0, 0
+    je .exit
+    mov a1, *1000
+    cmp a1, 10
+    je .exit
+    mov *r1, a1
+    dec r0
+    inc r1
+    inc r2
+    jmp .loop
+.exit:
+    mov *a0, r2
+    ret
+
+
+print:
+    mov r0, *a0
+.loop:
+    inc a0
+    cmp r0, 0
+    je .exit
+    mov *1001, *a0
+    dec r0
+    jmp .loop
+.exit:
+    ret
+
+
+start:
+    sub sp, 129
+    mov a0, sp
+    mov *a0, 128
+    call read
+    push a0
+    mov a0, hello_begin
+    call print
+    pop a0
+    call print
+    mov a0, hello_end
+    call print
+    add sp, 129
+    halt
